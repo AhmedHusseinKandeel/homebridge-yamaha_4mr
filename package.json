@@ -1,0 +1,25 @@
+{
+  "name": "yamaha_4mr",
+  "version": "1.0.0",
+  "description": "Homebridge plugin for homebridge: https://github.com/AhmedHusseinKandeel/yamaha_4mr",
+  "license": "open",
+  "keywords": [
+    "homebridge-plugin", "Yamaha", "Musiccast", "Homekit", "Siri"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/AhmedHusseinKandeel/yamaha_4mr"
+  },
+  "bugs": {
+    "url": "https://github.com/AhmedHusseinKandeel/yamaha_4mr/issues"
+  },
+  "engines": {
+    "node": ">=0.12.0",
+    "homebridge": ">=0.2.0"
+  },
+   "dependencies": {
+    "peer-ssdp": "0.0.5",
+    "request": "^2.69.0",
+     "url": "0.11.0"
+  }
+}
