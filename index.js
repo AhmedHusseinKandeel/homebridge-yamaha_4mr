@@ -31,7 +31,7 @@ Yamaha_mcAccessory2.prototype = {
       .setCharacteristic(Characteristic.Model, "Yamaha MC2")
       .setCharacteristic(Characteristic.SerialNumber, "6710160340");
  
-    let SpeakerService = new Service.Speaker("Active");
+    let SpeakerService = new Service.Speaker("Amplifier");
     SpeakerService
       .getCharacteristic(Characteristic.On)
         .on('get', this.getSpeakerOnCharacteristic.bind(this))
