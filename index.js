@@ -69,7 +69,7 @@ Yamaha_mcAccessory2.prototype = {
     });
   },
    
-  setgetSpeakerOnCharacteristic: function (on, next) {
+  setSpeakerOnCharacteristic: function (on, next) {
     var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (on ? 'on' : 'standby');
 	const me = this;
     request({
