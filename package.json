@@ -1,7 +1,7 @@
 {
-  "name": "yamaha_4mr",
+  "name": "homebridge-yamaha_4mr",
   "version": "1.0.1",
-  "description": "Homebridge plugin for homebridge: https://github.com/AhmedHusseinKandeel/yamaha_4mr",
+  "description": "Homebridge plugin for homebridge: https://github.com/AhmedHusseinKandeel/homebridge-yamaha_4mr",
   "license": "open",
   "keywords": [
     "homebridge-plugin",
@@ -12,10 +12,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/AhmedHusseinKandeel/yamaha_4mr"
+    "url": "git://github.com/AhmedHusseinKandeel/homebridge-yamaha_4mr"
   },
   "bugs": {
-    "url": "https://github.com/AhmedHusseinKandeel/yamaha_4mr/issues"
+    "url": "https://github.com/AhmedHusseinKandeel/homebridge-yamaha_4mr/issues"
   },
   "engines": {
     "node": ">=0.12.0",

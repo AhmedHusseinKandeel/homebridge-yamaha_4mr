@@ -1,4 +1,4 @@
-﻿"# homebridge-yamaha_mc2" 
+﻿"# homebridge-yamaha_4mr" 
 Based on the Yamaha Extended Control API Spec (https://github.com/samvdb/php-musiccast-api/blob/master/yxc-api-spec-advanced.pdf)
 With this homebridge module you can control your Yamaha Networked devices, in my case MusicCast devices. 
 This homebridge module is an alternative for homebridge-yamaha_mc. Since I configured it as a lightbulb you can also set the volume (brightness :) )
