@@ -11,7 +11,7 @@ module.exports = function(homebridge) {
   Service = homebridge.hap.Service;
   Characteristic = homebridge.hap.Characteristic;
   
-  homebridge.registerAccessory("homebridge-yamaha_mc2", "YamahaMC2", Yamaha_mcAccessory2);
+  homebridge.registerAccessory("homebridge-yamaha_4mr", "YamahaMC2", Yamaha_mcAccessory2);
 }
 
 function Yamaha_mcAccessory2(log, config) {
@@ -34,20 +34,20 @@ Yamaha_mcAccessory2.prototype = {
     let SpeakerService = new Service.Speaker("Active");
     SpeakerService
       .getCharacteristic(Characteristic.On)
-        .on('get', this.handleMuteGet.bind(this))
-        .on('set', this.handleMuteGet.bind(this));
+        .on('get', this.getSpeakerOnCharacteristic.bind(this))
+        .on('set', this.setSpeakerOnCharacteristic.bind(this));
 
     SpeakerService
       .getCharacteristic(Characteristic.Volume) // Volume!!
-        .on('get', this.getSpeakerVolume.bind(this))
-        .on('set', this.setSpeakerVolume.bind(this));
+        .on('get', this.getSpeakerVolumeCharacteristic.bind(this))
+        .on('set', this.setSpeakerVolumeCharacteristic.bind(this));
 
     this.informationService = informationService;
     this.SpeakerService = SpeakerService;
     return [informationService, SpeakerService];
   },
   
-  getLightBulbOnCharacteristic: function (next) {
+  getSpeakerOnCharacteristic: function (next) {
     const me = this;
     request({
         method: 'GET',
@@ -69,7 +69,7 @@ Yamaha_mcAccessory2.prototype = {
     });
   },
    
-  setLightBulbOnCharacteristic: function (on, next) {
+  setgetSpeakerOnCharacteristic: function (on, next) {
     var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (on ? 'on' : 'standby');
 	const me = this;
     request({
@@ -91,7 +91,7 @@ Yamaha_mcAccessory2.prototype = {
   // speaker characteristics
   
   
-  getSpeakerVolume: function (next) {
+  getSpeakerVolumeCharacteristic: function (next) {
     const me = this;
 	var res;
     request({
@@ -115,7 +115,7 @@ Yamaha_mcAccessory2.prototype = {
     });
   },
    
-  setSpeakerVolume: function (volume, next) {
+  setSpeakerVolumeCharacteristic: function (volume, next) {
     var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setVolume?volume=' + Math.floor(volume/100 * this.maxVol);
 	const me = this;
     request({
