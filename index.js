@@ -42,10 +42,10 @@ Yamaha_mcAccessory2.prototype = {
         .on('get', this.getSpeakerActiveCharacteristic.bind(this))
         .on('set', this.setSpeakerActiveCharacteristic.bind(this));
 
-        SpeakerService
-        .getCharacteristic(Characteristic.Volume) // Volume!!
-          .on('get', this.getSpeakerVolumeCharacteristic.bind(this))
-          .on('set', this.setSpeakerVolumeCharacteristic.bind(this));
+        // SpeakerService
+        // .getCharacteristic(Characteristic.Volume) // Volume!!
+        //   .on('get', this.getSpeakerVolumeCharacteristic.bind(this))
+        //   .on('set', this.setSpeakerVolumeCharacteristic.bind(this));
 
     this.informationService = informationService;
     this.SpeakerService = SpeakerService;
@@ -137,47 +137,47 @@ Yamaha_mcAccessory2.prototype = {
   // speaker characteristics
   
   
-  getSpeakerVolumeCharacteristic: function (next) {
-    const me = this;
-	var res = 50;
-    request({
-        method: 'GET',
-            url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
-            headers: {
-                'X-AppName': 'MusicCast/1.0',
-                'X-AppPort': '41100',
-			},
-    }, 
-    function (error, response, body) {
-      if (error) {
-        //me.log('HTTP get error ');
-        me.log(error.message);
-        return next(error);
-      }
-	  att=JSON.parse(body);
-	  res = Math.floor((att.volume / this.maxVol) * 100);
-	  me.log('HTTP GetStatus result:' + res);
-      return next(null,res);
-    });
-  },
+  // getSpeakerVolumeCharacteristic: function (next) {
+  //   const me = this;
+	// var res = 50;
+  //   request({
+  //       method: 'GET',
+  //           url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
+  //           headers: {
+  //               'X-AppName': 'MusicCast/1.0',
+  //               'X-AppPort': '41100',
+	// 		},
+  //   }, 
+  //   function (error, response, body) {
+  //     if (error) {
+  //       //me.log('HTTP get error ');
+  //       me.log(error.message);
+  //       return next(error);
+  //     }
+	//   att=JSON.parse(body);
+	//   res = Math.floor((att.volume / this.maxVol) * 100);
+	//   me.log('HTTP GetStatus result:' + res);
+  //     return next(null,res);
+  //   });
+  // },
    
-  setSpeakerVolumeCharacteristic: function (volume, next) {
-    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setVolume?volume=' + Math.floor(volume/100 * this.maxVol);
-	const me = this;
-    request({
-      url: url  ,
-      method: 'GET',
-      body: ""
-    },
-    function (error, response) {
-      if (error) {
-        //me.log('error with HTTP url='+url);
-        me.log(error.message);
-        return next(error);
-      }
-	  //me.log('HTTP setVolume succeeded with url:' + url);
-      return next();
-    });
-  }
+  // setSpeakerVolumeCharacteristic: function (volume, next) {
+  //   var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setVolume?volume=' + Math.floor(volume/100 * this.maxVol);
+	// const me = this;
+  //   request({
+  //     url: url  ,
+  //     method: 'GET',
+  //     body: ""
+  //   },
+  //   function (error, response) {
+  //     if (error) {
+  //       //me.log('error with HTTP url='+url);
+  //       me.log(error.message);
+  //       return next(error);
+  //     }
+	//   //me.log('HTTP setVolume succeeded with url:' + url);
+  //     return next();
+  //   });
+  // }
 }
 
