@@ -1,6 +1,6 @@
 {
   "name": "homebridge-yamaha_4mr",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Homebridge plugin for homebridge: https://github.com/AhmedHusseinKandeel/homebridge-yamaha_4mr",
   "license": "open",
   "keywords": [
