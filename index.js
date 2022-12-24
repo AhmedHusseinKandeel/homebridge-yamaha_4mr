@@ -73,13 +73,13 @@ Yamaha_mcAccessory2.prototype = {
         return next(error);
       }
 	  att=JSON.parse(body);
-	  me.log('HTTP GetStatus result:' + (att.power=='muted' ? "muted" : "unmute"));
-      return next(1, (att.power=='muted'));
+	  me.log('HTTP GetStatus result:' + (att.Mute=='muted' ? "muted" : "unmute"));
+      return next(1, (att.Mute=='muted'));
     });
   },
    
   setSpeakerMuteCharacteristic: function (muted, next) {
-    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (muted ? 'muted' : 'unmute');
+    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setMute?enable=' + (muted ? 'muted' : 'unmute');
 	const me = this;
     request({
       url: url  ,
