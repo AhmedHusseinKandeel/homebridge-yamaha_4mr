@@ -69,13 +69,13 @@ Yamaha_mcAccessory2.prototype = {
         return next(error);
       }
 	  att=JSON.parse(body);
-	  me.log('HTTP GetStatus result:' + (att.Mute=='muted' ? "muted" : "unmute"));
+	  me.log('HTTP GetStatus result:' + (att.Mute=='muted' ? "true" : "false"));
       return next(1, (att.Mute=='muted'));
     });
   },
    
   setSpeakerMuteCharacteristic: function (muted, next) {
-    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setMute?enable=' + (muted ? 'muted' : 'unmute');
+    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setMute?enable=' + (muted ? 'true' : 'false');
 	const me = this;
     request({
       url: url  ,
@@ -111,7 +111,7 @@ Yamaha_mcAccessory2.prototype = {
         return next(error);
       }
 	  att=JSON.parse(body);
-	  me.log('HTTP GetStatus result:' + (att.power=='on' ? "On" : "Off"));
+	  me.log('HTTP GetStatus result:' + (att.power=='on' ? "1" : "0"));
       return next(1, (att.power=='on'));
     });
   },
@@ -139,7 +139,7 @@ Yamaha_mcAccessory2.prototype = {
   
   getSpeakerVolumeCharacteristic: function (next) {
     const me = this;
-	var res;
+	var res = 50;
     request({
         method: 'GET',
             url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
@@ -157,7 +157,7 @@ Yamaha_mcAccessory2.prototype = {
 	  att=JSON.parse(body);
 	  res = Math.floor((att.volume / this.maxVol) * 100);
 	  me.log('HTTP GetStatus result:' + res);
-      return next(1,res);
+      return next(null,res);
     });
   },
    
