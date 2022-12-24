@@ -33,9 +33,13 @@ Yamaha_mcAccessory2.prototype = {
  
     let SpeakerService = new Service.Speaker("Amplifier");
     SpeakerService
-      .getCharacteristic(Characteristic.On)
-        .on('get', this.getSpeakerOnCharacteristic.bind(this))
-        .on('set', this.setSpeakerOnCharacteristic.bind(this));
+      // .getCharacteristic(Characteristic.On)
+      //   .on('get', this.getSpeakerOnCharacteristic.bind(this))
+      //   .on('set', this.setSpeakerOnCharacteristic.bind(this));
+
+        .getCharacteristic(Characteristic.Mute)
+        .on('get', this.getSpeakerMuteCharacteristic.bind(this))
+        .on('set', this.setSpeakerMuteCharacteristic.bind(this));
 
     SpeakerService
       .getCharacteristic(Characteristic.Volume) // Volume!!
@@ -47,7 +51,7 @@ Yamaha_mcAccessory2.prototype = {
     return [informationService, SpeakerService];
   },
   
-  getSpeakerOnCharacteristic: function (next) {
+  getSpeakerMuteCharacteristic: function (next) {
     const me = this;
     request({
         method: 'GET',
@@ -64,13 +68,13 @@ Yamaha_mcAccessory2.prototype = {
         return next(error);
       }
 	  att=JSON.parse(body);
-	  me.log('HTTP GetStatus result:' + (att.power=='on' ? "On" : "Off"));
-      return next(null, (att.power=='on'));
+	  me.log('HTTP GetStatus result:' + (att.power=='muted' ? "muted" : "unmute"));
+      return next(0, (att.power=='muted'));
     });
   },
    
-  setSpeakerOnCharacteristic: function (on, next) {
-    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (on ? 'on' : 'standby');
+  setSpeakerMuteCharacteristic: function (muted, next) {
+    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (muted ? 'muted' : 'unmute');
 	const me = this;
     request({
       url: url  ,
@@ -111,7 +115,7 @@ Yamaha_mcAccessory2.prototype = {
 	  att=JSON.parse(body);
 	  res = Math.floor(att.volume / this.maxVol * 100);
 	  me.log('HTTP GetStatus result:' + res);
-      return next(null, res);
+      return next(0, res);
     });
   },
    
