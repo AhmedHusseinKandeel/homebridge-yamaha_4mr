@@ -42,9 +42,14 @@ Yamaha_mcAccessory2.prototype = {
         .on('set', this.setSpeakerMuteCharacteristic.bind(this));
 
     SpeakerService
-      .getCharacteristic(Characteristic.Volume) // Volume!!
-        .on('get', this.getSpeakerVolumeCharacteristic.bind(this))
-        .on('set', this.setSpeakerVolumeCharacteristic.bind(this));
+      .getCharacteristic(Characteristic.Active) // Volume!!
+        .on('get', this.getSpeakerActiveCharacteristic.bind(this))
+        .on('set', this.setSpeakerActiveCharacteristic.bind(this));
+
+        SpeakerService
+        .getCharacteristic(Characteristic.Volume) // Volume!!
+          .on('get', this.getSpeakerVolumeCharacteristic.bind(this))
+          .on('set', this.setSpeakerVolumeCharacteristic.bind(this));
 
     this.informationService = informationService;
     this.SpeakerService = SpeakerService;
@@ -69,7 +74,7 @@ Yamaha_mcAccessory2.prototype = {
       }
 	  att=JSON.parse(body);
 	  me.log('HTTP GetStatus result:' + (att.power=='muted' ? "muted" : "unmute"));
-      return next(0, (att.power=='muted'));
+      return next(1, (att.power=='muted'));
     });
   },
    
@@ -92,6 +97,47 @@ Yamaha_mcAccessory2.prototype = {
     });
   },
   
+
+  getSpeakerActiveCharacteristic: function (next) {
+    const me = this;
+    request({
+        method: 'GET',
+            url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
+            headers: {
+                'X-AppName': 'MusicCast/1.0',
+                'X-AppPort': '41100',
+			},
+    }, 
+    function (error, response, body) {
+      if (error) {
+        //me.log('HTTP get error ');
+        me.log(error.message);
+        return next(error);
+      }
+	  att=JSON.parse(body);
+	  me.log('HTTP GetStatus result:' + (att.power=='on' ? "On" : "Off"));
+      return next(1, (att.power=='on'));
+    });
+  },
+   
+  setSpeakerActiveCharacteristic: function (on, next) {
+    var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setPower?power=' + (on ? 'On' : 'standby');
+	const me = this;
+    request({
+      url: url  ,
+      method: 'GET',
+      body: ""
+    },
+    function (error, response) {
+      if (error) {
+        //me.log('error with HTTP url='+url);
+        me.log(error.message);
+        return next(error);
+      }
+	  //me.log('HTTP setPower succeeded with url:' + url);
+      return next();
+    });
+  },
   // speaker characteristics
   
   
