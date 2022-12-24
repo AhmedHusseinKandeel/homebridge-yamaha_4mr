@@ -33,16 +33,12 @@ Yamaha_mcAccessory2.prototype = {
  
     let SpeakerService = new Service.Speaker("Amplifier");
     SpeakerService
-      // .getCharacteristic(Characteristic.On)
-      //   .on('get', this.getSpeakerOnCharacteristic.bind(this))
-      //   .on('set', this.setSpeakerOnCharacteristic.bind(this));
-
-        .getCharacteristic(Characteristic.Mute)
+        .getCharacteristic(Characteristic.Mute) // Mute!!
         .on('get', this.getSpeakerMuteCharacteristic.bind(this))
         .on('set', this.setSpeakerMuteCharacteristic.bind(this));
 
     SpeakerService
-      .getCharacteristic(Characteristic.Active) // Volume!!
+      .getCharacteristic(Characteristic.Active) // Power!!
         .on('get', this.getSpeakerActiveCharacteristic.bind(this))
         .on('set', this.setSpeakerActiveCharacteristic.bind(this));
 
@@ -161,7 +157,7 @@ Yamaha_mcAccessory2.prototype = {
 	  att=JSON.parse(body);
 	  res = Math.floor(att.volume / this.maxVol * 100);
 	  me.log('HTTP GetStatus result:' + res);
-      return next(0, res);
+      return next(res);
     });
   },
    
