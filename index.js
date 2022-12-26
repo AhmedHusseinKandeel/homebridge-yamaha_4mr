@@ -31,7 +31,7 @@ Yamaha_mcAccessory2.prototype = {
       .setCharacteristic(Characteristic.Model, "Yamaha MC2")
       .setCharacteristic(Characteristic.SerialNumber, "6710160340");
  
-    let SpeakerService = new Service.SmartSpeaker();
+    let SmartSpeakerService = new Service.SmartSpeaker();
     SmartSpeaker
         .getCharacteristic(Characteristic.CurrentMediaState) // CurrentMedia!!
         .onGet(this.handleCurrentMediaStateGet.bind(this));
@@ -43,16 +43,16 @@ Yamaha_mcAccessory2.prototype = {
 
       SmartSpeaker
       .getCharacteristic(Characteristic.Mute) // Mute!!
-        .on('get', this.getSpeakerMuteCharacteristic.bind(this))
-        .on('set', this.setSpeakerMuteCharacteristic.bind(this));  
+        .on('get', this.getSmartSpeakerMuteCharacteristic.bind(this))
+        .on('set', this.setSmartSpeakerMuteCharacteristic.bind(this));  
      SmartSpeaker
         .getCharacteristic(Characteristic.Volume) // Volume!!
-          .on('get', this.getSpeakerVolumeCharacteristic.bind(this))
-          .on('set', this.setSpeakerVolumeCharacteristic.bind(this));
+          .on('get', this.getSmartSpeakerVolumeCharacteristic.bind(this))
+          .on('set', this.setSmartSpeakerVolumeCharacteristic.bind(this));
 
     this.informationService = informationService;
-    this.SmartSpeaker = SmartSpeaker;
-    return [informationService, SpeakerService];
+    this.SmartSpeakerSpeaker = SmartSpeakerSpeaker;
+    return [informationService, SmartSpeakerService];
   },
 
 
@@ -93,42 +93,56 @@ Yamaha_mcAccessory2.prototype = {
   },
 
   
-  getSpeakerMuteCharacteristic() {
-
-
-    const SpeakerMute = this.Characteristic.SpeakerMute.Mute;
-
-    return SpeakerMute;
-
+  getSmartSpeakerMuteCharacteristic: function (next) {
+    const me = this;
+    request({
+        method: 'GET',
+            url: 'http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/getStatus',
+            headers: {
+                'X-AppName': 'MusicCast/1.0',
+                'X-AppPort': '41100',
+			},
+    }, 
+    function (error, response, body) {
+      if (error) {
+        //me.log('HTTP get error ');
+        me.log(error.message);
+        return next(error);
+      }
+	  att=JSON.parse(body);
+	  me.log('HTTP GetStatus result:' + (att.Mute=='muted' ? "true" : "false"));
+      return next(1, (att.Mute=='muted'));
+    });
   },
  
-  setSpeakerMuteCharacteristic  (Mute) {
-    // this.log.debug('Triggered SET SpeakerMute:' Mute);
-    // return Mute;
+ 
+    setSmartSpeakerMuteCharacteristic: function (muted, next) {
+      var url='http://' + this.host + '/YamahaExtendedControl/v1/' + this.zone + '/setMute?enable=' + (muted ? 'true' : 'false');
+    const me = this;
+      request({
+        url: url  ,
+        method: 'GET',
+        body: ""
+      },
+      function (error, response) {
+        if (error) {
+          //me.log('error with HTTP url='+url);
+          me.log(error.message);
+          return next(error);
+        }
+      //me.log('HTTP setPower succeeded with url:' + url);
+        return next();
+      });
+    },
 
-
-    console.log("Setting SpeakerMute to: " + Mute);
-    SpeakerMute = Mute;
-   
-
-    callback();
-  },
-  
-
-
-   
-
-
-  
-  
-  getSpeakerVolumeCharacteristic: function (next) {
+  getSmartSpeakerVolumeCharacteristic: function (next) {
     const me = this;
 	var res = 50;
   
     return next(null,res);
   },
    
-  setSpeakerVolumeCharacteristic: function (volume) {
+  setSmartSpeakerVolumeCharacteristic: function (volume) {
 
      return volume();
   }
